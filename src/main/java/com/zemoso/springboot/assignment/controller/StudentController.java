@@ -1,6 +1,6 @@
 package com.zemoso.springboot.assignment.controller;
 
-import com.zemoso.springboot.assignment.DTO.StudentDTO;
+import com.zemoso.springboot.assignment.dto.StudentDTO;
 import com.zemoso.springboot.assignment.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.zemoso.springboot.assignment.service;
 
-import com.zemoso.springboot.assignment.DTO.StudentDTO;
+import com.zemoso.springboot.assignment.dto.StudentDTO;
 import com.zemoso.springboot.assignment.entity.Department;
 import com.zemoso.springboot.assignment.entity.Student;
 import com.zemoso.springboot.assignment.repository.DepartmentRepository;

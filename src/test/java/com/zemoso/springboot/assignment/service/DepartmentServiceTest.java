@@ -81,4 +81,61 @@ class DepartmentServiceTest {
         // Verify that the repository method was called
         verify(departmentRepository, times(1)).findById(id);
     }
+
+    @Test
+    void createDepartment_ValidInput_ReturnsCreatedDepartmentDTO() {
+        // Arrange
+        DepartmentDTO departmentDTO = new DepartmentDTO(null, "HR", "Address 1", "HR-001");
+        Department createdDepartment = new Department(1L, "HR", "Address 1", "HR-001");
+
+        when(departmentRepository.save(any(Department.class))).thenReturn(createdDepartment);
+
+        // Act
+        DepartmentDTO result = departmentService.createDepartment(departmentDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("HR", result.getDepartmentName());
+        assertEquals("Address 1", result.getDepartmentAddress());
+        assertEquals("HR-001", result.getDepartmentCode());
+        // Verify that the repository method was called
+        verify(departmentRepository, times(1)).save(any(Department.class));
+    }
+
+    @Test
+    void updateDepartment_ValidInput_ReturnsUpdatedDepartmentDTO() {
+        // Arrange
+        DepartmentDTO departmentDTO = new DepartmentDTO(1L, "HR", "Address 1", "HR-001");
+        Department existingDepartment = new Department(1L, "HR", "Address 1", "HR-001");
+        Department updatedDepartment = new Department(1L, "HR", "Address 2", "HR-002");
+
+        when(departmentRepository.findById(departmentDTO.getId())).thenReturn(Optional.of(existingDepartment));
+        when(departmentRepository.save(any(Department.class))).thenReturn(updatedDepartment);
+
+        // Act
+        DepartmentDTO result = departmentService.updateDepartment(departmentDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("HR", result.getDepartmentName());
+        assertEquals("Address 2", result.getDepartmentAddress());
+        assertEquals("HR-002", result.getDepartmentCode());
+        // Verify that the repository method was called
+        verify(departmentRepository, times(1)).findById(departmentDTO.getId());
+        verify(departmentRepository, times(1)).save(any(Department.class));
+    }
+
+    @Test
+    void deleteDepartment_ExistingId_DeletesDepartment() {
+        // Arrange
+        Long departmentId = 1L;
+
+        // Act
+        departmentService.deleteDepartment(departmentId);
+
+        // Verify that the repository method was called
+        verify(departmentRepository, times(1)).deleteById(departmentId);
+    }
 }

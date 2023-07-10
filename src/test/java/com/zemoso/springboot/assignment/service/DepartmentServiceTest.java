@@ -2,7 +2,9 @@ package com.zemoso.springboot.assignment.service;
 
 import com.zemoso.springboot.assignment.dto.DepartmentDTO;
 import com.zemoso.springboot.assignment.entity.Department;
+import com.zemoso.springboot.assignment.entity.Student;
 import com.zemoso.springboot.assignment.repository.DepartmentRepository;
+import com.zemoso.springboot.assignment.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,6 +20,9 @@ class DepartmentServiceTest {
 
     @Mock
     private DepartmentRepository departmentRepository;
+
+    @Mock
+    private StudentRepository studentRepository;
 
     @InjectMocks
     private DepartmentService departmentService;
@@ -131,11 +136,21 @@ class DepartmentServiceTest {
     void deleteDepartment_ExistingId_DeletesDepartment() {
         // Arrange
         Long departmentId = 1L;
+        Department department = new Department(departmentId, "HR", "Address 1", "HR-001");
+        List<Student> students = new ArrayList<>();
+        students.add(new Student(1L, "John", "Doe", "john.doe@example.com", department));
+        students.add(new Student(2L, "Jane", "Smith", "jane.smith@example.com", department));
+        department.setStudents(students);
+
+        when(departmentRepository.findById(departmentId)).thenReturn(Optional.of(department));
 
         // Act
         departmentService.deleteDepartment(departmentId);
 
-        // Verify that the repository method was called
+        // Verify that the repository methods were called
+        verify(departmentRepository, times(1)).findById(departmentId);
+        verify(studentRepository, times(2)).save(any(Student.class));
+        verify(departmentRepository, times(1)).save(any(Department.class));
         verify(departmentRepository, times(1)).deleteById(departmentId);
     }
 }

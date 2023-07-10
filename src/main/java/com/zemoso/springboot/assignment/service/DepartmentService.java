@@ -2,7 +2,9 @@ package com.zemoso.springboot.assignment.service;
 
 import com.zemoso.springboot.assignment.dto.DepartmentDTO;
 import com.zemoso.springboot.assignment.entity.Department;
+import com.zemoso.springboot.assignment.entity.Student;
 import com.zemoso.springboot.assignment.repository.DepartmentRepository;
+import com.zemoso.springboot.assignment.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,9 +14,11 @@ import java.util.stream.Collectors;
 public class DepartmentService {
 
     private DepartmentRepository departmentRepository;
+    private StudentRepository studentRepository;
 
-    public DepartmentService(DepartmentRepository departmentRepository) {
+    public DepartmentService(DepartmentRepository departmentRepository,StudentRepository studentRepository) {
         this.departmentRepository = departmentRepository;
+        this.studentRepository = studentRepository;
     }
 
     public List<DepartmentDTO> getAllDepartments() {
@@ -49,6 +53,23 @@ public class DepartmentService {
     }
 
     public void deleteDepartment(Long id) {
+        // Find the department to be deleted
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Department not found with id " + id));
+
+        List<Student> students = department.getStudents();
+        for (Student student : students) {
+            student.setDepartment(null);
+            studentRepository.save(student);
+        }
+
+        // Delete the association between students and the department
+        department.getStudents().clear();
+
+        // Save the modified department to update the changes
+        departmentRepository.save(department);
+
+        // Delete the department
         departmentRepository.deleteById(id);
     }
 

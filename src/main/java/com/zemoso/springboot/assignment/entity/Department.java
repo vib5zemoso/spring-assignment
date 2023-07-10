@@ -10,7 +10,6 @@ import java.util.*;
 @Entity
 @Table(name = "departments")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Department {
 
@@ -26,4 +25,15 @@ public class Department {
 
     @Column(name = "department_code", nullable = false)
     private String departmentCode;
+
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    private List<Student> students;
+
+    public Department(Long id, String departmentName, String departmentAddress, String departmentCode) {
+        this.id = id;
+        this.departmentName = departmentName;
+        this.departmentAddress = departmentAddress;
+        this.departmentCode = departmentCode;
+    }
 }

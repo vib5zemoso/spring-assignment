@@ -33,8 +33,7 @@
 			**/dto/**,
 			**/entity/**,
 			**/config/**,
-			**/auth/**,
-			**/service/StudentService.java
+			**/auth/**
 		</sonar.coverage.exclusions>
 
 	</properties>

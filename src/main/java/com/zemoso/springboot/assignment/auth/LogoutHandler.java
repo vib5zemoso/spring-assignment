@@ -18,7 +18,7 @@ import java.io.IOException;
  * Needed to perform SSO logout with Auth0. By default, Spring will clear the SecurityContext and the session.
  * This controller will also log users out of Auth0 by calling the Auth0 logout endpoint.
  */
-@RestController
+@Controller
 public class LogoutHandler extends SecurityContextLogoutHandler {
 
     private final ClientRegistrationRepository clientRegistrationRepository;

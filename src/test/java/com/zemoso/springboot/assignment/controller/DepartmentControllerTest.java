@@ -59,9 +59,8 @@ class DepartmentControllerTest {
         // Arrange
         Long id = 1L;
         DepartmentDTO departmentDTO = new DepartmentDTO(id, "IT", "123 Street", "IT-001");
-
+//C  ->  S --> DTO
         when(departmentService.getDepartmentById(id)).thenReturn(departmentDTO);
-
         // Act
         ResponseEntity<DepartmentDTO> response = departmentController.getDepartmentById(id);
 
@@ -74,6 +73,7 @@ class DepartmentControllerTest {
         // Verify that the service method was called
         verify(departmentService, times(1)).getDepartmentById(id);
     }
+
 
     @Test
     void getDepartmentById_NonexistentId_ReturnsNotFound() {
